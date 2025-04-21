@@ -16,7 +16,7 @@
  -----------------------------------------------------------------------
 Author       : 焱铭
 Date         : 2025-04-21 20:03:52 +0800
-LastEditTime : 2025-04-21 23:41:32 +0800
+LastEditTime : 2025-04-21 23:46:53 +0800
 Github       : https://github.com/YanMing-lxb/
 FilePath     : /EGWaterProps/src/data.py
 Description  : 
@@ -26,6 +26,8 @@ Description  :
 # --------------------------------- 数据来源 ---------------------------------
 # Dow Chemical USA. 2001b. Engineering manual for DOWTHERM SR-1and DOWTHERM 
 # 4000 inhibited ethylene glycol heat transfer fluids.Midland, MI.
+# 行对应温度                    列对应体积浓度
+# 温度范围: -35--125°C step 5  体积浓度范围: 0.1%--0.9% step 0.1,
 # --------------------------------------------------------------------------
 # 乙二醇水溶液的密度 (kg/m3)
 eg_rho = [
@@ -177,7 +179,7 @@ eg_mu = [
 ]
 
 # 乙二醇水溶液的冰点沸点(℃) 100.7KPa freezing and boiling points
-# 质量浓度 体积浓度  冰点℃    沸点℃
+#   质量浓度 体积浓度  冰点℃    沸点℃
 eg_fb_extracted = [
     [0.0 , 0.0 ,  0.0 , 100.0],
     [5.0 , 4.4 , -1.4 , 100.6],
