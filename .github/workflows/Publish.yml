@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest  # 指定运行此作业的操作系统
     environment:
       name: pypi  # 定义环境名称
-      url: https://pypi.org/project/EG-ASP  # 替换为实际的PyPI项目URL
+      url: https://pypi.org/project/eg-asp  # 替换为实际的PyPI项目URL
     permissions:
       contents: read  # 需要读取内容的权限
       id-token: write  # 需要写入ID令牌的权限
