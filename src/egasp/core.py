@@ -2,7 +2,7 @@ import logging
 import sys
 import bisect
 from typing import Tuple
-from egasp.data import EGP
+from egasp.data.data import EGP
 
 
 class EG_ASP_Core:
