@@ -16,7 +16,7 @@
  *  -----------------------------------------------------------------------
  * Author       : 焱铭
  * Date         : 2025-04-22 10:43:55 +0800
- * LastEditTime : 2025-04-22 19:22:00 +0800
+ * LastEditTime : 2025-04-22 22:30:30 +0800
  * Github       : https://github.com/YanMing-lxb/
  * FilePath     : /EG-ASP/README.md
  * Description  : 
@@ -42,6 +42,12 @@ pip3 install egasp
 ```
 pip3 install --upgrade egasp
 ```
+
+## 未来计划
+
+- [ ] 打包成独立可执行程序
+- [ ] 支持 excel 调用
+
 
 ## 来源
 
