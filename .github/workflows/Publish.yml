@@ -103,6 +103,6 @@ jobs:
       uses: softprops/action-gh-release@v2  # 使用softprops/action-gh-release动作来发布到GitHub Release
       with:
         body_path: ${{ github.workspace }}-CHANGELOG.txt
-        token: ${{ secrets.PUBLISH_EG-ASP }}  # 替换为实际的GitHub Token
+        token: ${{ secrets.PUBLISH_EGASP }}  # 替换为实际的GitHub Token
         name: EG-ASP ${{ github.ref_name }} # 
         files: dist/*  # 指定要发布的文件路径
