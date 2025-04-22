@@ -76,8 +76,8 @@ class UpdateChecker():
             if cache_path.exists() and (cache_time_remaining > 0):  # 检查缓存文件是否存在且未过期
                 with cache_path.open('r') as f:  # 打开缓存文件
                     data = toml.load(f)  # 加载缓存文件内容
-                    self.logger.info(_("读取 egasp 版本缓存文件中的版本号，缓存有效期: ") + f'{int(hours):02} h {int(minutes):02} min {int(seconds):02} s')  # 记录日志信息
-                    self.logger.info(_("egasp 版本缓存文件路径: ") + str(self.cache_file))  # 记录日志信息
+                    # self.logger.info(_("读取 egasp 版本缓存文件中的版本号，缓存有效期: ") + f'{int(hours):02} h {int(minutes):02} min {int(seconds):02} s')  # 记录日志信息
+                    # self.logger.info(_("egasp 版本缓存文件路径: ") + str(self.cache_file))  # 记录日志信息
                     return data.get("latest_version")  # 返回最新版本号
         except Exception as e:
             self.logger.error(_("加载缓存版本时出错: ") + str(e))  # 记录错误信息
