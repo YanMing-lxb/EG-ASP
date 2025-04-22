@@ -16,7 +16,7 @@
  -----------------------------------------------------------------------
 Author       : 焱铭
 Date         : 2025-04-22 10:43:55 +0800
-LastEditTime : 2025-04-22 21:28:51 +0800
+LastEditTime : 2025-04-22 21:51:25 +0800
 Github       : https://github.com/YanMing-lxb/
 FilePath     : /EG-ASP/src/egasp/__main__.py
 Description  : 
@@ -111,29 +111,28 @@ def main():
 
     args = parser.parse_args()
 
-    console = Console(width=34)
+    console = Console(width=59)
     console.print(f"\n[bold green]{script_name}[/bold green]", justify="center")
-    print('----------------------------------')
+    print('-----+-----------------------------------------------+-----')
     mass, volume, freezing, boiling, rho, cp, k, mu = get_egasp(args.query_temp, args.query_type, args.query_value)
-    print('----------------------------------\n')
+    print('-----+-----------------------------------------------+-----\n')
 
     # 创建表格
     table = Table(show_header=True, header_style="bold dark_orange", box=box.ASCII_DOUBLE_HEAD, title="乙二醇水溶液查询结果")
 
     # 添加列
-    table.add_column("属性", justify="left", style="cyan"   , no_wrap=True)
+    table.add_column("属性", justify="left", style="cyan", no_wrap=True)
     table.add_column("单位", justify="left", style="magenta", no_wrap=True)
-    table.add_column("数值", justify="left", style="green"  , no_wrap=True)
+    table.add_column("数值", justify="left", style="green", no_wrap=True)
+    table.add_column("属性", justify="left", style="cyan", no_wrap=True)
+    table.add_column("单位", justify="left", style="magenta", no_wrap=True)
+    table.add_column("数值", justify="left", style="green", no_wrap=True)
 
     # 添加行
-    table.add_row("质量浓度" , "%"      , f"{mass:.2f}")
-    table.add_row("体积浓度" , "%"      , f"{volume:.2f}")
-    table.add_row("冰点"    , "°C"      , f"{freezing:.2f}")
-    table.add_row("沸点"    , "°C"      , f"{boiling:.2f}")
-    table.add_row("密度"    , "kg/m³"  , f"{rho:.2f}")
-    table.add_row("比热容"  , "J/kg·K" , f"{cp:.2f}")
-    table.add_row("导热率"  , "W/m·K"  , f"{k:.4f}")
-    table.add_row("粘度"    , "Pa·s"   , f"{mu:.8f}")
+    table.add_row("质量浓度", "%", f"{mass:.2f}", "密度", "kg/m³", f"{rho:.2f}")
+    table.add_row("体积浓度", "%", f"{volume:.2f}", "比热容", "J/kg·K", f"{cp:.2f}")
+    table.add_row("冰点", "°C", f"{freezing:.2f}", "导热率", "W/m·K", f"{k:.4f}")
+    table.add_row("沸点", "°C", f"{boiling:.2f}", "粘度", "Pa·s", f"{mu:.8f}")
 
     # 打印表格
     console.print(table)
