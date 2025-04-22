@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "egasp"
+dynamic = ["version"]
+authors = [
+  { name = "焱铭", email = "lxb-yanming@foxmail.com" },
+]
+description = "乙二醇水溶液属性查询程序 Ethylene Glycol Aqueous Solution Properties Program"
+keywords = ["Ethylene Glycol", "Properties"]
+dependencies = ["rich", "rich_argparse", "toml", "packaging"]
+readme = "README.md"
+requires-python = ">=3.9"
+license = "GPL-3.0-or-later"
+classifiers = [
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/YanMing-lxb/EG-ASP"
+"Bug Tracker" = "https://github.com/YanMing-lxb/EG-ASP/issues"
+
+[project.scripts]
+egasp = "egasp:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "egasp.version.__version__"}
+
+[tool.setuptools.package-data]
+egasp = ["locale/en/LC_MESSAGES/*.mo"]

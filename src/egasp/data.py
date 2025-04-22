@@ -178,9 +178,9 @@ eg_mu = [
 
 ]
 
-# 乙二醇水溶液的冰点沸点(℃) 100.7KPa freezing and boiling points
-#   质量浓度 体积浓度  冰点℃    沸点℃
-eg_fb_extracted = [
+# 乙二醇水溶液的冰点沸点(°C) 100.7KPa freezing and boiling points
+# 质量浓度 体积浓度  冰点°C  沸点°C
+eg_fb = [
     [0.0 , 0.0 ,  0.0 , 100.0],
     [5.0 , 4.4 , -1.4 , 100.6],
     [10.0, 8.9 , -3.2 , 101.1],
@@ -237,3 +237,10 @@ eg_fb_extracted = [
 
 
 
+EGP = {
+    'rho': eg_rho,
+    'cp': eg_cp,
+    'k': eg_k,
+    'mu': eg_mu,
+    'fb': eg_fb
+}

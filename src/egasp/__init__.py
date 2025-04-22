@@ -15,15 +15,18 @@
 
  -----------------------------------------------------------------------
 Author       : 焱铭
-Date         : 2024-03-01 15:52:28 +0800
-LastEditTime : 2025-03-14 07:57:05 +0800
+Date         : 2025-04-22 16:22:22 +0800
+LastEditTime : 2025-04-22 16:22:23 +0800
 Github       : https://github.com/YanMing-lxb/
-FilePath     : /egasp/src/egasp/version.py
+FilePath     : /EG-ASP/src/egasp/__init__.py
 Description  : 
  -----------------------------------------------------------------------
 '''
-# -*- coding: utf-8 -*-
-#!/usr/bin/env python
 
-script_name = 'EG-ASP'
-__version__ = '0.0.1'
+import sys
+
+if sys.version_info[0] == 3:
+    from .__main__ import main  # 显式导出 main() 供 CLI 入口使用
+else:
+    # Don't import anything.
+    pass 

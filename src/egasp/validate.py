@@ -15,15 +15,38 @@
 
  -----------------------------------------------------------------------
 Author       : 焱铭
-Date         : 2024-03-01 15:52:28 +0800
-LastEditTime : 2025-03-14 07:57:05 +0800
+Date         : 2025-04-22 12:43:54 +0800
+LastEditTime : 2025-04-22 15:19:04 +0800
 Github       : https://github.com/YanMing-lxb/
-FilePath     : /egasp/src/egasp/version.py
+FilePath     : /EG-ASP/src/egasp/validate.py
 Description  : 
  -----------------------------------------------------------------------
 '''
-# -*- coding: utf-8 -*-
-#!/usr/bin/env python
+import logging
 
-script_name = 'EG-ASP'
-__version__ = '0.0.1'
+class Validate:
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+    def type_value(self, query_type:str, default_value:str='volume')->str:
+        if query_type in ['volume', 'v', 'mass', 'm', '']:
+            if query_type == '':
+                self.logger.info(f"未输入查询类型，将使用默认类型 {default_value}")
+                return default_value
+            elif query_type == 'v':
+                return 'volume'
+            elif query_type == 'm':
+                return 'mass'
+            return query_type
+        else:
+            self.logger.info(f"无效的查询类型，将使用默认值 {default_value}")
+            return default_value
+    def input_value(self, value, min_val=None, max_val=None):
+        try:
+            if min_val is not None and value < min_val:
+                self.logger.warning(f"输入值不能小于 {min_val}，请重新输入。")
+            if max_val is not None and value > max_val:
+                self.logger.warning(f"输入值不能大于 {max_val}，请重新输入。")
+            return value
+        except ValueError:
+            self.logger.warning("请输入有效的数字，请重新输入。")
+

@@ -11,7 +11,7 @@ import importlib.resources
 from packaging import version
 from datetime import timedelta
 
-from pytexmk.language import set_language
+from egasp.language import set_language
 
 _ = set_language('check_version')
 
@@ -31,7 +31,7 @@ class UpdateChecker():
         2. 初始化版本列表。
         3. 将缓存时间转换为秒并存储。
         4. 存储超时时间。
-        5. 获取 pytexmk 安装路径并拼接 data 子路径，创建 data 目录（如果已存在则不报错）。
+        5. 获取 egasp 安装路径并拼接 data 子路径，创建 data 目录（如果已存在则不报错）。
         6. 创建缓存文件路径。
         """
         self.logger = logging.getLogger(__name__)  # 创建日志对象
@@ -41,8 +41,8 @@ class UpdateChecker():
         self.cache_time = cache_time * 3600  # 将缓存时间转换为秒并存储
         self.time_out = time_out  # 存储超时时间
 
-        data_path = Path(importlib.resources.files('pytexmk')) / 'data'  # 获取 pytexmk 安装路径并拼接 data 子路径
-        self.cache_file = data_path / "pytexmk_version_cache.toml"  # 创建缓存文件路径
+        data_path = Path(importlib.resources.files('egasp')) / 'data'  # 获取 egasp 安装路径并拼接 data 子路径
+        self.cache_file = data_path / "egasp_version_cache.toml"  # 创建缓存文件路径
 
     # --------------------------------------------------------------------------------
     # 定义 缓存文件读取函数
@@ -76,8 +76,8 @@ class UpdateChecker():
             if cache_path.exists() and (cache_time_remaining > 0):  # 检查缓存文件是否存在且未过期
                 with cache_path.open('r') as f:  # 打开缓存文件
                     data = toml.load(f)  # 加载缓存文件内容
-                    self.logger.info(_("读取 PyTeXMK 版本缓存文件中的版本号，缓存有效期: ") + f'{int(hours):02} h {int(minutes):02} min {int(seconds):02} s')  # 记录日志信息
-                    self.logger.info(_("PyTeXMK 版本缓存文件路径: ") + str(self.cache_file))  # 记录日志信息
+                    self.logger.info(_("读取 egasp 版本缓存文件中的版本号，缓存有效期: ") + f'{int(hours):02} h {int(minutes):02} min {int(seconds):02} s')  # 记录日志信息
+                    self.logger.info(_("egasp 版本缓存文件路径: ") + str(self.cache_file))  # 记录日志信息
                     return data.get("latest_version")  # 返回最新版本号
         except Exception as e:
             self.logger.error(_("加载缓存版本时出错: ") + str(e))  # 记录错误信息
@@ -86,12 +86,12 @@ class UpdateChecker():
     # --------------------------------------------------------------------------------
     # 定义 缓存文件写入函数
     # --------------------------------------------------------------------------------
-    def _update_pytexmk_version_cache(self, latest_version):
+    def _update_egasp_version_cache(self, latest_version):
         """
-        更新PyTeXMK版本缓存文件.
+        更新egasp版本缓存文件.
 
         参数:
-        latest_version (str): 最新的PyTeXMK版本号.
+        latest_version (str): 最新的egasp版本号.
 
         行为逻辑:
         尝试打开缓存文件并以写模式写入最新的版本号.如果操作失败,记录错误日志.
@@ -135,7 +135,7 @@ class UpdateChecker():
         try:
             response = urllib.request.urlopen(url)  # 尝试打开URL
             html_content = response.read().decode('utf-8')  # 读取并解码HTML内容
-            pattern = re.compile(r'<a\s+href="[^"]+/pytexmk-([\d\.]+)-py3-none-any\.whl[^"]*"\s+data-requires-python="[^"]+">.*?</a>', re.DOTALL)  # 定义正则表达式模式
+            pattern = re.compile(r'<a\s+href="[^"]+/egasp-([\d\.]+)-py3-none-any\.whl[^"]*"\s+data-requires-python="[^"]+">.*?</a>', re.DOTALL)  # 定义正则表达式模式
             matches = pattern.findall(html_content)  # 使用正则表达式匹配版本号
 
             for ver in matches:  # 遍历匹配到的版本号
@@ -181,17 +181,17 @@ class UpdateChecker():
         if latest_version:
             latest_version = version.parse(latest_version)  # 将字符串转换为版本对象
         else:
-            latest_version = self._get_latest_version("pytexmk")
+            latest_version = self._get_latest_version("egasp")
             if latest_version:
-                self._update_pytexmk_version_cache(str(latest_version))
+                self._update_egasp_version_cache(str(latest_version))
             else:
                 return
 
         # 获取当前安装的版本信息
-        current_version = version.parse(importlib.metadata.version("pytexmk"))
+        current_version = version.parse(importlib.metadata.version("egasp"))
 
         if current_version < latest_version:
             print(_("有新版本可用: ") + f"[bold green]{latest_version}[/bold green] " + _("当前版本: ") + f"[bold red]{current_version}[/bold red]")
-            print(_("请运行 [bold green]'pip install --upgrade pytexmk'[/bold green] 进行更新"))
+            print(_("请运行 [bold green]'pip install --upgrade egasp'[/bold green] 进行更新"))
         else:
             print(_("当前版本: ") + f"[bold green]{current_version}[/bold green]")
