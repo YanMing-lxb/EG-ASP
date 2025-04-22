@@ -16,7 +16,7 @@
  -----------------------------------------------------------------------
 Author       : 焱铭
 Date         : 2025-04-22 10:43:55 +0800
-LastEditTime : 2025-04-22 21:51:25 +0800
+LastEditTime : 2025-04-22 22:23:25 +0800
 Github       : https://github.com/YanMing-lxb/
 FilePath     : /EG-ASP/src/egasp/__main__.py
 Description  : 
@@ -105,8 +105,8 @@ def main():
         description="[i]乙二醇水溶液属性查询程序  ---- 焱铭[/]",
         formatter_class = RichHelpFormatter,
         )
-    parser.add_argument("--query_type", type=str, default="volume", help="浓度类型 (volume/mass or v/m), 默认值为 volume (体积浓度)")
-    parser.add_argument("--query_value", type=float, default=50, help="查询浓度 %% (范围: 10 ~ 90), 默认值为 50")  # 修改此处
+    parser.add_argument("-qt", "--query_type", type=str, default="volume", help="浓度类型 (volume/mass or v/m), 默认值为 volume (体积浓度)")
+    parser.add_argument("-qv", "--query_value", type=float, default=50, help="查询浓度 %% (范围: 10 ~ 90), 默认值为 50")  # 修改此处
     parser.add_argument("query_temp", type=float, help="查询温度 °C (范围: -35 ~ 125)")  # 如果温度单位有%也需要转义
 
     args = parser.parse_args()
