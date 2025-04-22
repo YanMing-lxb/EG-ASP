@@ -38,7 +38,7 @@ jobs:
     needs: build  # 指定此作业依赖于build作业
     runs-on: ubuntu-latest  # 指定运行此作业的操作系统
     environment:
-      name: pypi  # 定义环境名称
+      name: eg-asp-pypi  # 定义环境名称
       url: https://pypi.org/project/eg-asp  # 替换为实际的PyPI项目URL
     permissions:
       contents: read  # 需要读取内容的权限
