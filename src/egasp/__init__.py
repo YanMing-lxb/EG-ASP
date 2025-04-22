@@ -16,7 +16,7 @@
  -----------------------------------------------------------------------
 Author       : 焱铭
 Date         : 2025-04-22 16:22:22 +0800
-LastEditTime : 2025-04-22 16:22:23 +0800
+LastEditTime : 2025-04-22 20:03:48 +0800
 Github       : https://github.com/YanMing-lxb/
 FilePath     : /EG-ASP/src/egasp/__init__.py
 Description  : 
@@ -24,6 +24,7 @@ Description  :
 '''
 
 import sys
+from .__main__ import get_egasp
 
 if sys.version_info[0] == 3:
     from .__main__ import main  # 显式导出 main() 供 CLI 入口使用
