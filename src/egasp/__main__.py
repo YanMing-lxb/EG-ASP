@@ -16,7 +16,7 @@
  -----------------------------------------------------------------------
 Author       : 焱铭
 Date         : 2025-04-22 10:43:55 +0800
-LastEditTime : 2025-04-22 20:17:41 +0800
+LastEditTime : 2025-04-22 21:28:51 +0800
 Github       : https://github.com/YanMing-lxb/
 FilePath     : /EG-ASP/src/egasp/__main__.py
 Description  : 
@@ -112,7 +112,7 @@ def main():
     args = parser.parse_args()
 
     console = Console(width=34)
-    console.print(f"\n[bold green]{script_name} v{__version__}[/bold green]", justify="center")
+    console.print(f"\n[bold green]{script_name}[/bold green]", justify="center")
     print('----------------------------------')
     mass, volume, freezing, boiling, rho, cp, k, mu = get_egasp(args.query_temp, args.query_type, args.query_value)
     print('----------------------------------\n')
