@@ -27,7 +27,6 @@
 
 [![GitHub](https://img.shields.io/badge/Github-EGASP-000000.svg)](https://github.com/YanMing-lxb/EG-ASP) [![License](https://img.shields.io/badge/license-GPLv3-aff)](https://www.latex-project.org/lppl/) ![OS](https://img.shields.io/badge/OS-Linux%2C%20Win%2C%20Mac-pink.svg) [![GitHub release](https://img.shields.io/github/release/YanMing-lxb/EG-ASP.svg?color=blueviolet&label=version&style=popout)](https://github.com/YanMing-lxb/EG-ASP/releases/latest) [![Last Commit](https://img.shields.io/github/last-commit/YanMing-lxb/EG-ASP)](https://github.com/YanMing-lxb/EG-ASP/zipball/master) [![Issues](https://img.shields.io/github/issues/YanMing-lxb/EG-ASP)](https://github.com/YanMing-lxb/EG-ASP/issues) [![PyPI version](https://img.shields.io/pypi/v/egasp.svg)](https://pypi.python.org/pypi/egasp/) [![PyPI Downloads](https://img.shields.io/pypi/dm/egasp.svg?label=PyPI%20downloads)](https://pypi.org/project/egasp/) ![GitHub repo size](https://img.shields.io/github/repo-size/YanMing-lxb/EG-ASP)
 
-
 ## 安装
 
 官方版本 EG-ASP 发布在 [PyPI](https://pypi.org/project/egasp/) 上，并且可以通过 pip 包管理器从 PyPI 镜像轻松安装。
@@ -43,3 +42,7 @@ pip3 install egasp
 ```
 pip3 install --upgrade egasp
 ```
+
+## 来源
+
+https://www.glycolsales.com.au/dowtherm/dowtherm-sr-1/
