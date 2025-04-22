@@ -1,177 +1,133 @@
 import logging
-
+import sys
+import bisect
+from typing import Tuple
 from egasp.data import EGP
 
 
-
 class EG_ASP_Core:
+
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
-    def _interpolate_linear(self, x1: float, y1: float, x2: float, y2: float, x: float) -> float:
-        """线性插值函数
-        
-        根据两点 (x1,y1) 和 (x2,y2) 计算x处的插值y
-        
-        Parameters
-        ----------
-        x1 : float
-            第一个点的x坐标
-        y1 : float
-            第一个点的y坐标
-        x2 : float
-            第二个点的x坐标
-        y2 : float
-            第二个点的y坐标
-        x : float
-            插值点的x坐标
+    @staticmethod
+    def _interpolate_linear(x1: float, y1: float, x2: float, y2: float, x: float) -> float:
+        """线性插值计算"""
+        try:
+            return y1 + (y2 - y1) * (x - x1) / (x2 - x1)
+        except ZeroDivisionError:
+            raise RuntimeError(f"插值节点间距为零 x1={x1}, x2={x2}")
 
-        Returns
-        -------
-        float
-            插值结果y
-        """
-        return y1 + (y2 - y1) * (x - x1) / (x2 - x1)
+    def _error_exit(self, msg: str) -> None:
+        """记录错误日志并退出程序"""
+        self.logger.error(msg)
+        sys.exit(f"FATAL ERROR: {msg}")
+
+    def _find_nearest_nodes(self, nodes: list, value: float, name: str) -> Tuple[int, int]:
+        """查找最近的节点索引"""
+        try:
+            idx = bisect.bisect_right(nodes, value) - 1
+            lower_idx = max(idx, 0)
+            upper_idx = min(bisect.bisect_left(nodes, value), len(nodes) - 1)
+
+            if not (nodes[lower_idx] <= value <= nodes[upper_idx]):
+                self._error_exit(f"{name} {value} 超出有效范围 [{nodes[0]}, {nodes[-1]}]")
+
+            return lower_idx, upper_idx
+        except IndexError as e:
+            self._error_exit(f"节点索引错误: {str(e)}")
+
+    def get_props(self, temp: float, conc: float, egp_key: str, temp_range: Tuple[int, int] = (-35, 125), conc_range: Tuple[float, float] = (10.0, 90.0), temp_step: int = 5, conc_step: float = 10.0) -> float:
+        """根据温度和浓度获取物性参数"""
+        if egp_key not in ['rho', 'cp', 'k', 'mu']:
+            self._error_exit(f"无效物性参数 {egp_key}，可选值: rho/cp/k/mu")
+
+        # 生成数据节点
+        try:
+            temp_nodes = list(range(temp_range[0], temp_range[1] + 1, temp_step))
+            conc_nodes = [round(conc_range[0] + i * conc_step, 1) for i in range(int((conc_range[1] - conc_range[0]) / conc_step) + 1)]
+        except ValueError as e:
+            self._error_exit(f"参数范围错误: {str(e)}")
+
+        # 查找节点索引
+        t_lower_idx, t_upper_idx = self._find_nearest_nodes(temp_nodes, temp, "温度")
+        c_lower_idx, c_upper_idx = self._find_nearest_nodes(conc_nodes, conc, "浓度")
 
 
-    def get_props(self, temp: float, conc: float, egp_key: str, 
-                    temp_range: tuple = (-35, 125), conc_range: tuple = (10, 90),
-                    temp_step: int = 5, conc_step: float = 10) -> float | None:
-        """根据温度和浓度获取乙二醇水溶液的物性参数
-
-        Parameters
-        ----------
-        temp : float
-            温度, 单位摄氏度
-        conc : float
-            浓度, 质量分数 (10%~90%)
-        egp_key : str
-            物性关键词: rho cp k mu 分别对应密度、比热容、导热率和动力粘度
-        temp_range : tuple, optional
-            温度范围, 默认(-35, 125)
-        conc_range : tuple, optional
-            浓度范围, 默认(10, 90)
-        temp_step : int, optional
-            温度步长, 默认5
-        conc_step : float, optional
-            浓度步长, 默认10
-
-        Returns
-        -------
-        float | None
-            对应的物性参数值, 如果输入超出范围或数据中存在None, 返回None
-        """
-        # data_matrix: 二维列表, 行对应温度, 列对应浓度, 存储物性参数值
+        # 获取数据矩阵
         data_matrix = EGP.get(egp_key)
-        # 生成温度节点列表
-        temp_nodes = list(range(temp_range[0], temp_range[1] + 1, temp_step))
-        # 生成浓度节点列表, 避免浮点精度问题
-        conc_nodes = [round(conc_range[0] + i * conc_step, 1) 
-                    for i in range(int((conc_range[1] - conc_range[0]) / conc_step) + 1)]
-        
-        # 检查输入参数是否在有效范围内
-        if (temp < temp_nodes[0] or temp > temp_nodes[-1] or
-            conc < conc_nodes[0] or conc > conc_nodes[-1]):
-            self.logger.error(f"查询温度 {temp} °C 浓度 {conc} % 在数据库范围之外")
-        
-        # 找到相邻温度节点
-        t_lower = max(t for t in temp_nodes if t <= temp)
-        t_upper = min(t for t in temp_nodes if t >= temp)
-        
-        # 找到相邻浓度节点
-        c_lower = max(c for c in conc_nodes if c <= conc)
-        c_upper = min(c for c in conc_nodes if c >= conc)
-        
-        # 获取索引位置
-        t_lower_idx = temp_nodes.index(t_lower)
-        t_upper_idx = temp_nodes.index(t_upper)
-        c_lower_idx = conc_nodes.index(c_lower)
-        c_upper_idx = conc_nodes.index(c_upper)
-        
-        # 提取四个角点的值
+
+        # 提取四个角点数据
         v11 = data_matrix[t_lower_idx][c_lower_idx]
         v12 = data_matrix[t_lower_idx][c_upper_idx]
         v21 = data_matrix[t_upper_idx][c_lower_idx]
         v22 = data_matrix[t_upper_idx][c_upper_idx]
-        
+
         # 检查数据有效性
         if any(v is None for v in [v11, v12, v21, v22]):
-            self.logger.error(f"查询温度 {temp} °C 浓度 {conc} % 在数据库缺失数据范围之内, 请调整输入值。")
-            exit()
-        
-        # 执行双线性插值
+            self._error_exit(f"温度 {temp}°C 浓度 {conc}% 附近存在数据缺失 (数据库本身缺失)")
+
+        # 执行插值计算
+        t_lower, t_upper = temp_nodes[t_lower_idx], temp_nodes[t_upper_idx]
+        c_lower, c_upper = conc_nodes[c_lower_idx], conc_nodes[c_upper_idx]
+
         if t_lower == t_upper and c_lower == c_upper:
             return v11
-        elif t_lower == t_upper:
+        if t_lower == t_upper:
             return self._interpolate_linear(c_lower, v11, c_upper, v12, conc)
-        elif c_lower == c_upper:
+        if c_lower == c_upper:
             return self._interpolate_linear(t_lower, v11, t_upper, v21, temp)
-        else:
-            v1 = self._interpolate_linear(c_lower, v11, c_upper, v12, conc)
-            v2 = self._interpolate_linear(c_lower, v21, c_upper, v22, conc)
-            return self._interpolate_linear(t_lower, v1, t_upper, v2, temp)
+
+        v1 = self._interpolate_linear(c_lower, v11, c_upper, v12, conc)
+        v2 = self._interpolate_linear(c_lower, v21, c_upper, v22, conc)
+
+        return self._interpolate_linear(t_lower, v1, t_upper, v2, temp)
 
 
-    def get_fb_props(self, query: float, query_type: str = 'volume') -> tuple[float, float, float, float] | None:
-        """根据质量浓度或体积浓度查询乙二醇溶液的属性
+    def get_fb_props(self, query: float, query_type: str = 'volume') -> Tuple[float, float, float, float]:
+        """根据浓度查询物性参数"""
+        if query_type not in ['mass', 'volume']:
+            self._error_exit(f"无效查询类型 {query_type}，必须为 'mass' 或 'volume'")
 
-        Parameters
-        ----------
-        query : float
-            查询的浓度值
-        query_type : str, optional
-            查询类型, 'mass' 或 'volume', 默认为 'volume'
-
-        Returns
-        -------
-        tuple[float, float, float, float] | None
-            返回对应的质量浓度、体积浓度、冰点、沸点, 如果查询值超出范围返回None
-
-        Raises
-        ------
-        ValueError
-            当query_type不是'mass'或'volume'时抛出
-        """
-
-        # 每个元素为 (mass_conc, volume_conc, freezing, boiling)
         data = EGP.get('fb')
 
-        # 根据查询类型排序数据
+        # 排序数据
         sort_key = 1 if query_type == 'volume' else 0
         sorted_data = sorted(data, key=lambda x: x[sort_key])
-        
-        # 遍历寻找相邻数据点
-        for i in range(len(sorted_data) - 1):
-            current = sorted_data[i]
-            next_item = sorted_data[i + 1]
-            
-            current_val = current[sort_key]
-            next_val = next_item[sort_key]
-            
-            if current_val <= query <= next_val:
-                # 解包数据点
-                m1, v1, f1, b1 = current
-                m2, v2, f2, b2 = next_item
-                
-                # 检查数据有效性
-                if any(v is None for v in [m1, v1, f1, b1, m2, v2, f2, b2]):
-                    self.logger.error(f"查询浓度 {query} % 在数据库缺失数据范围之内, 请调整输入值。")
-                    exit()
-                
-                # 执行插值计算
-                if query_type == 'volume':
-                    mass = self._interpolate_linear(v1, m1, v2, m2, query)
-                    volume = query
-                    freezing = self._interpolate_linear(v1, f1, v2, f2, query)
-                    boiling = self._interpolate_linear(v1, b1, v2, b2, query)
-                else:
-                    volume = self._interpolate_linear(m1, v1, m2, v2, query)
-                    mass = query
-                    freezing = self._interpolate_linear(m1, f1, m2, f2, query)
-                    boiling = self._interpolate_linear(m1, b1, m2, b2, query)
-                
-                return (mass, volume, freezing, boiling)
-        
-        # 查询值超出数据范围
-        self.logger.error(f"查询浓度 {query} % 超出数据")
-        exit()
+        sorted_values = [item[sort_key] for item in sorted_data]
+
+        # 查找相邻数据点
+        try:
+            idx = bisect.bisect_left(sorted_values, query)
+            if idx == 0 or idx == len(sorted_data):
+                self._error_exit(f"浓度 {query}% 超出数据范围 [{sorted_values[0]}, {sorted_values[-1]}]")
+
+            prev, curr = sorted_data[idx - 1], sorted_data[idx]
+            p_val, c_val = prev[sort_key], curr[sort_key]
+
+            if not (p_val <= query <= c_val):
+                self._error_exit(f"浓度 {query}% 不在相邻数据点之间 [{p_val}, {c_val}]")
+        except Exception as e:
+            self._error_exit(f"数据查询失败: {str(e)}")
+
+        # 解包数据
+        m1, v1, f1, b1 = prev
+        m2, v2, f2, b2 = curr
+
+        # 检查数据完整性
+        if any(v is None for v in [m1, v1, f1, b1, m2, v2, f2, b2]):
+            self._error_exit(f"浓度 {query}% 附近存在数据缺失 (数据库本身缺失)")
+
+        # 执行插值
+        if query_type == 'volume':
+            mass = self._interpolate_linear(v1, m1, v2, m2, query)
+            volume = query
+            freezing = self._interpolate_linear(v1, f1, v2, f2, query)
+            boiling = self._interpolate_linear(v1, b1, v2, b2, query)
+        else:
+            volume = self._interpolate_linear(m1, v1, m2, v2, query)
+            mass = query
+            freezing = self._interpolate_linear(m1, f1, m2, f2, query)
+            boiling = self._interpolate_linear(m1, b1, m2, b2, query)
+
+        return (mass, volume, freezing, boiling)
