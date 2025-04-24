@@ -1,0 +1,4 @@
+packaging==25.0
+rich==14.0.0
+rich_argparse==1.7.0
+toml==0.10.2
