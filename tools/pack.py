@@ -105,7 +105,7 @@ def run_command(command: list, success_msg: str, error_msg: str, process_name: s
 # 核心功能
 # ======================
 def pre_check() -> bool:
-    """构建前环境检查"""
+    """打包前环境检查"""
     check_items = {
         "Python版本": (sys.version_info >= (3,8), "需要Python 3.8+"),
         "入口文件": (ENTRY_POINT.exists(), f"缺失入口文件 {ENTRY_POINT}"),
@@ -175,7 +175,7 @@ def run_pyinstaller(venv_name: str = VENV_NAME) -> bool:
         console.print(f"✗ PyInstaller未正确安装: {pyinstaller_path}", style="error")
         return False
 
-    # 构建参数配置
+    # 打包参数配置
     args = [
         str(pyinstaller_path),
         *BUILD_CONFIG["common"],
@@ -202,8 +202,8 @@ def run_pyinstaller(venv_name: str = VENV_NAME) -> bool:
         process_name="打包应用程序"
     )
 
-def verify_build() -> bool:
-    """验证构建结果"""
+def verify_pack() -> bool:
+    """验证打包结果"""
     exe_path = Path("dist") / (PROJECT_NAME + (".exe" if os.name == "nt" else ""))
     
     checks = [
@@ -220,14 +220,14 @@ def verify_build() -> bool:
     return all_ok
 
 def clean_up():
-    """清理构建环境"""
+    """清理打包环境"""
     try:
-        if Confirm.ask("⚠️ 确定要清理构建环境吗？", default=True):
-            # 清理构建产物
+        if Confirm.ask("⚠️ 确定要清理打包环境吗？", default=True):
+            # 清理打包产物
             for artifact in ["build", "__pycache__", VENV_NAME]:
                 if Path(artifact).exists():
                     shutil.rmtree(artifact)
-                    console.print(f"✓ 删除构建产物: {artifact}", style="info")
+                    console.print(f"✓ 删除打包产物: {artifact}", style="info")
                     
             # 清理spec文件
             for spec_file in Path().glob("*.spec"):
@@ -245,25 +245,25 @@ def clean_up():
 # ======================
 if __name__ == "__main__":
     try:
-        console.rule(f"[bold]🚀 {PROJECT_NAME} 构建系统[/]")
+        console.rule(f"[bold]🚀 {PROJECT_NAME} 打包系统[/]")
         
         if not pre_check():
-            console.rule("[bold red]❌ 预检查失败，构建终止！[/]")
+            console.rule("[bold red]❌ 预检查失败，打包终止！[/]")
             sys.exit(1)
 
         success = all([
             create_venv(),
             install_dependencies(),
             run_pyinstaller(),
-            verify_build()
+            verify_pack()
         ])
 
         if success:
-            console.rule("[bold green]✅ 构建成功！[/]")
+            console.rule("[bold green]✅ 打包成功！[/]")
             console.print(f"生成的可执行文件位于：[bold underline]dist/{PROJECT_NAME}[/]")
             clean_up()
         else:
-            console.rule("[bold red]❌ 构建失败！[/]")
+            console.rule("[bold red]❌ 打包失败！[/]")
 
     except PermissionError as e:
         console.print(f"✗ 权限错误: {e}", style="error")
