@@ -21,7 +21,7 @@ class EG_ASP_Core:
     def _error_exit(self, msg: str) -> None:
         """记录错误日志并退出程序"""
         self.logger.error(msg)
-        sys.exit(f"FATAL ERROR: {msg}")
+        sys.exit()
 
     def _find_nearest_nodes(self, nodes: list, value: float, name: str) -> Tuple[int, int]:
         """查找最近的节点索引"""
