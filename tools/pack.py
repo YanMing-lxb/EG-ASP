@@ -6,7 +6,6 @@ import subprocess
 from pathlib import Path
 
 from rich.theme import Theme
-from rich.prompt import Confirm
 from rich.console import Console
 
 # ======================
@@ -222,19 +221,19 @@ def verify_pack() -> bool:
 def clean_up():
     """清理打包环境"""
     try:
-        if Confirm.ask("⚠️ 确定要清理打包环境吗？", default=True):
-            # 清理打包产物
-            for artifact in ["build", "__pycache__", VENV_NAME]:
-                if Path(artifact).exists():
-                    shutil.rmtree(artifact)
-                    console.print(f"✓ 删除打包产物: {artifact}", style="info")
-                    
-            # 清理spec文件
-            for spec_file in Path().glob("*.spec"):
-                spec_file.unlink()
-                console.print(f"✓ 删除spec文件: {spec_file}", style="info")
+        # if Confirm.ask("⚠️  确定要清理打包环境吗？", default=True):
+        # 清理打包产物
+        for artifact in ["build", "__pycache__", VENV_NAME]:
+            if Path(artifact).exists():
+                shutil.rmtree(artifact)
+                console.print(f"✓ 删除打包产物: {artifact}", style="info")
                 
-            console.print("✓ 环境清理完成", style="success")
+        # 清理spec文件
+        for spec_file in Path().glob("*.spec"):
+            spec_file.unlink()
+            console.print(f"✓ 删除spec文件: {spec_file}", style="info")
+            
+        console.print("✓ 环境清理完成", style="success")
         return True
     except Exception as e:
         console.print(f"✗ 清理失败: {e}", style="error")

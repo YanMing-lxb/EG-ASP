@@ -16,7 +16,7 @@
  -----------------------------------------------------------------------
 Author       : 焱铭
 Date         : 2025-04-22 10:43:55 +0800
-LastEditTime : 2025-04-22 22:23:25 +0800
+LastEditTime : 2025-04-25 12:19:54 +0800
 Github       : https://github.com/YanMing-lxb/
 FilePath     : /EG-ASP/src/egasp/__main__.py
 Description  : 
@@ -36,7 +36,7 @@ from egasp.logger_config import setup_logger
 from egasp.check_version import UpdateChecker
 # 版本信息
 from egasp.version import script_name, __version__
-logger = setup_logger(True)
+logger = setup_logger(False)
 
 def get_egasp(query_temp: float, query_type: str = 'volume', query_value: float = 50) -> tuple:
     """
