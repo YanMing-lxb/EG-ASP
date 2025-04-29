@@ -98,6 +98,14 @@ jobs:
         name: python-package-distributions  # 指定要下载的artifact名称
     - name: Display structure of downloaded files
       run: ls -R
+    
+    # 新增步骤：下载 Windows 构建产物
+    - name: Download Windows Python package distributions
+      uses: actions/download-artifact@v4
+      with:
+        name: windows-python-package-distributions
+    - name: Verify file structure after download
+      run: ls -R dist/
 
     - name: Extract tag name  # 提取标签名称的步骤
       id: extract_tag
