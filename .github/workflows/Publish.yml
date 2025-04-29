@@ -52,12 +52,11 @@ jobs:
         python ${{ github.workspace }}\tools\pack.py
       shell: pwsh
 
-    - name: Store the distribution packages  # 存储构建好的分发包的步骤
-      uses: actions/upload-artifact@v4  # 使用actions/upload-artifact动作来上传构建好的包
+    - name: Store the distribution packages
+      uses: actions/upload-artifact@v4
       with:
-        name: python-package-distributions  # 指定上传的artifact名称
-        path: |
-          dist\egasp.exe
+        name: windows-python-package-distributions  # 修改此处名称
+        path: dist\egasp.exe
 
   publish-to-pypi:
     name: Publish 🐍 EG-ASP 📦 to PyPI  # 定义发布到PyPI作业的名称
