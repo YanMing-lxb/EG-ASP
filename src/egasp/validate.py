@@ -16,7 +16,7 @@
  -----------------------------------------------------------------------
 Author       : 焱铭
 Date         : 2025-04-22 12:43:54 +0800
-LastEditTime : 2025-04-22 15:19:04 +0800
+LastEditTime : 2025-04-29 17:37:32 +0800
 Github       : https://github.com/YanMing-lxb/
 FilePath     : /EG-ASP/src/egasp/validate.py
 Description  : 
@@ -32,13 +32,13 @@ class Validate:
             if query_type == '':
                 self.logger.info(f"未输入查询类型，将使用默认类型 {default_value}")
                 return default_value
-            elif query_type == 'v':
+            if query_type == 'v':
                 return 'volume'
-            elif query_type == 'm':
+            if query_type == 'm':
                 return 'mass'
             return query_type
         else:
-            self.logger.info(f"无效的查询类型，将使用默认值 {default_value}")
+            self.logger.warning(f"无效查询类型，将使用默认值 {default_value}")
             return default_value
     def input_value(self, value, min_val=None, max_val=None):
         try:

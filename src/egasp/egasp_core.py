@@ -2,6 +2,7 @@ import logging
 import sys
 import bisect
 from typing import Tuple
+
 from egasp.data.data import EGP
 
 
