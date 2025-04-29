@@ -37,7 +37,7 @@ jobs:
 
     steps:
     - name: Checkout source  # 检出源代码的步骤
-      uses: actions/checkout@v5  # 使用actions/checkout动作来检出代码
+      uses: actions/checkout@v4  # 使用actions/checkout动作来检出代码
 
     - name: Set up 🐍 Python  # 设置Python环境的步骤
       uses: actions/setup-python@v5  # 使用actions/setup-python动作来设置Python环境
