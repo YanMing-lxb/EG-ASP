@@ -47,6 +47,7 @@ jobs:
     - name: Build 📦 source  # 构建源代码
       run: |
         cd ${{ github.workspace }}
+        python3 -m pip install --upgrade rich
         python ${{ github.workspace }}\tools\pack.py
       shell: pwsh
 
