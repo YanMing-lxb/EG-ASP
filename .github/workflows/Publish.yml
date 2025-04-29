@@ -47,7 +47,7 @@ jobs:
     - name: Build 📦 source  # 构建源代码
       run: |
         cd ${{ github.workspace }}
-        python /tools/pack.py
+        python ${{ github.workspace }}\tools\pack.py
       shell: pwsh
 
     - name: Store the distribution packages  # 存储构建好的分发包的步骤
@@ -55,7 +55,7 @@ jobs:
       with:
         name: python-package-distributions  # 指定上传的artifact名称
         path: |
-          dist/egasp.exe
+          dist\egasp.exe
 
   publish-to-pypi:
     name: Publish 🐍 EG-ASP 📦 to PyPI  # 定义发布到PyPI作业的名称
