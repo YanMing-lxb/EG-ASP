@@ -45,7 +45,9 @@ jobs:
         python-version: "3.x"  # 指定Python版本为3.x
 
     - name: Build 📦 source  # 构建源代码
-      run: python /tools/pack.py
+      run: |
+        cd ${{ github.workspace }}
+        python /tools/pack.py
       shell: pwsh
 
     - name: Store the distribution packages  # 存储构建好的分发包的步骤
