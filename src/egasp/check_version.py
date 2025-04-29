@@ -183,6 +183,6 @@ class UpdateChecker():
 
         if current_version < latest_version:
             print(_("有新版本可用: ") + f"[bold green]{latest_version}[/bold green] " + _("当前版本: ") + f"[bold red]{current_version}[/bold red]")
-            print(_("请运行 [bold green]'pip install --upgrade %(args)s'[/bold green] 进行更新") % {'args': PROGRAM_NAME})
+            print(_("python库请运行 [bold green]'pip install --upgrade %(args)s'[/bold green] 进行更新，独立可执行文件则请去 https://github.com/YanMing-lxb/EG-ASP/releases/latest 下载") % {'args': PROGRAM_NAME})
         else:
             print(_("当前版本: ") + f"[bold green]{current_version}[/bold green]")
