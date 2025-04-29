@@ -48,6 +48,7 @@ jobs:
       run: |
         cd ${{ github.workspace }}
         python3 -m pip install --upgrade rich
+        chcp 65001
         python ${{ github.workspace }}\tools\pack.py
       shell: pwsh
 
