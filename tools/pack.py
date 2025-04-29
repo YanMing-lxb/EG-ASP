@@ -19,7 +19,7 @@ custom_theme = Theme({
     "status": "bold cyan",
     "time": "bold magenta"
 })
-console = Console(theme=custom_theme,legacy_windows=False, encoding="utf-8")
+console = Console(theme=custom_theme,legacy_windows=False)
 
 # ======================
 # 项目配置
