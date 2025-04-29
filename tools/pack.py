@@ -8,6 +8,9 @@ from pathlib import Path
 from rich.theme import Theme
 from rich.console import Console
 
+if sys.stdout.encoding != 'UTF-8':
+    sys.stdout.reconfigure(encoding='utf-8')
+
 # ======================
 # 主题与样式配置
 # ======================

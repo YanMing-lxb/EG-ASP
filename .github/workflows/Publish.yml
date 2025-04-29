@@ -47,7 +47,7 @@ jobs:
     - name: Build 📦 source  # 构建源代码
       run: |
         cd ${{ github.workspace }}
-        set PYTHONIOENCODING=utf-8
+        $env:PYTHONIOENCODING = "utf-8"  # 使用PowerShell环境变量语法
         python3 -m pip install --upgrade rich
         python ${{ github.workspace }}\tools\pack.py
       shell: pwsh
