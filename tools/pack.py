@@ -242,15 +242,72 @@ def clean_up():
         console.print(f"✗ 清理失败: {e}", style="error")
         return False
 
+def modify_state_param(main_file, new_state):
+    """修改主程序中的STATE参数，返回原始值"""
+    try:
+        with open(main_file, "r", encoding="utf-8") as file:
+            lines = file.readlines()
+        
+        for i, line in enumerate(lines):
+            if line.strip().startswith("STATE ="):
+                original_line = line
+                # 保留原有缩进和格式
+                original_state = line.split("=")[1].strip()
+                indent = line[:line.find("STATE")]
+                lines[i] = f"{indent}STATE = '{new_state}'\n"
+                break
+        
+        if original_line is None:
+            console.print("✗ 找不到STATE定义", style="error")
+            return False, None
+        
+        with open(main_file, "w", encoding="utf-8") as file:
+            file.writelines(lines)
+        
+        console.print(f"✓ STATE参数已修改为 {new_state}", style="success")
+        return True, original_state
+    
+    except Exception as e:
+        console.print(f"✗ 修改STATE失败: {e}", style="error")
+        return False, None
+
+def restore_state_param(main_file, original_state):
+    """恢复主程序中的STATE参数"""
+    try:
+        with open(main_file, "r", encoding="utf-8") as file:
+            lines = file.readlines()
+        
+        for i, line in enumerate(lines):
+            if line.strip().startswith("STATE ="):
+                # 仅替换值部分，保留原有格式
+                before = line.split("=")[0]
+                lines[i] = f"{before}= {original_state}\n"
+                break
+        
+        with open(main_file, "w", encoding="utf-8") as file:
+            file.writelines(lines)
+        
+        console.print(f"✓ STATE参数已恢复为 {original_state}", style="success")
+    
+    except Exception as e:
+        console.print(f"✗ 恢复STATE失败: {e}", style="error")
+
 # ======================
 # 主流程
 # ======================
 if __name__ == "__main__":
+    new_state = "input"
+    main_file = Path("./src/egasp/__main__.py")
     try:
         console.rule(f"[bold]🚀 {PROJECT_NAME} 打包系统[/]")
         
         if not pre_check():
             console.rule("[bold red]❌ 预检查失败，打包终止！[/]")
+            sys.exit(1)
+        
+        success_modify, original_state = modify_state_param(main_file, new_state)
+        if not success_modify:
+            console.rule("[bold red]❌ 修改STATE参数失败，终止打包！[/]")
             sys.exit(1)
 
         success = all([
@@ -275,3 +332,7 @@ if __name__ == "__main__":
     except Exception as e:
         console.rule("[bold red]💥 发生未捕获异常！[/]")
         console.print_exception(show_locals=True)
+    finally:
+        # 状态参数被恢复
+        if original_state is not None:
+            restore_state_param(main_file, original_state)
