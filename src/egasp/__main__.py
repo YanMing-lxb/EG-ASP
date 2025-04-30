@@ -16,7 +16,7 @@
  -----------------------------------------------------------------------
 Author       : 焱铭
 Date         : 2025-04-22 10:43:55 +0800
-LastEditTime : 2025-04-30 11:20:40 +0800
+LastEditTime : 2025-04-30 14:16:25 +0800
 Github       : https://github.com/YanMing-lxb/
 FilePath     : /EG-ASP/src/egasp/__main__.py
 Description  : 
@@ -93,7 +93,7 @@ def get_egasp(query_temp: float, query_type: str = 'volume', query_value: float 
     k = eg.get_props(temp=query_temp, conc=volume, egp_key='k')
 
     # 获取动力粘度 (mu), 单位为 Pa·s, 并将结果从 mPa·s 转换为 Pa·s
-    mu = eg.get_props(temp=query_temp, conc=volume, egp_key='mu') / 1000000
+    mu = eg.get_props(temp=query_temp, conc=volume, egp_key='mu') / 1000
 
     return mass, volume, freezing, boiling, rho, cp, k, mu
 
@@ -115,7 +115,7 @@ def print_table(result: dict):
     table.add_row("质量浓度", "%", f"{result['mass']:.2f}", "密度", "kg/m³", f"{result['rho']:.2f}")
     table.add_row("体积浓度", "%", f"{result['volume']:.2f}", "比热容", "J/kg·K", f"{result['cp']:.2f}")
     table.add_row("冰点", "°C", f"{result['freezing']:.2f}", "导热率", "W/m·K", f"{result['k']:.4f}")
-    table.add_row("沸点", "°C", f"{result['boiling']:.2f}", "粘度", "Pa·s", f"{result['mu']:.8f}")
+    table.add_row("沸点", "°C", f"{result['boiling']:.2f}", "粘度", "Pa·s", f"{result['mu']:.5f}")
 
     # 打印表格
     console.print(table)
@@ -135,13 +135,13 @@ def cli_main():
 
     console = Console(width=59)
     console.print(f"\n[bold green]{script_name}[/bold green]", justify="center")
-    print('-----+-----------------------------------------------+-----')
+    print('-----+--------------------------------------------+-----')
     # 打印校验后的查询参数
     print(f"查询类型: {args.query_type}")
     print(f"查询浓度: {args.query_value} %")
     print(f"查询温度: {args.query_temp} °C")
     mass, volume, freezing, boiling, rho, cp, k, mu = get_egasp(args.query_temp, args.query_type, args.query_value)
-    print('-----+-----------------------------------------------+-----\n')
+    print('-----+--------------------------------------------+-----\n')
 
     result = {"mass": mass, "volume": volume, "freezing": freezing, "boiling": boiling, "rho": rho, "cp": cp, "k": k, "mu": mu}
 
@@ -157,7 +157,7 @@ def input_main():
         # 初始化控制台输出
         console = Console(width=59)
         console.print(f"\n[bold green]{script_name}[/bold green]", justify="center")
-        print('-----+-----------------------------------------------+-----')
+        print('-----+--------------------------------------------+-----')
 
         # 交互式输入参数
         while True:
@@ -178,7 +178,7 @@ def input_main():
             mass, volume, freezing, boiling, rho, cp, k, mu = get_egasp(query_temp, query_type, query_value)
 
             # 打印结果表格
-            print('-----+-----------------------------------------------+-----\n')
+            print('-----+--------------------------------------------+-----\n')
             result = {"mass": mass, "volume": volume, "freezing": freezing, "boiling": boiling, "rho": rho, "cp": cp, "k": k, "mu": mu}
             print_table(result)
 
