@@ -38,5 +38,5 @@ egasp = "egasp:main"
 version = {attr = "egasp.version.__version__"}
 
 [tool.setuptools.package-data]
-"pytexmk.data" = ["*.py"]
+"egasp.data" = ["*.py"]
 egasp = ["locale/en/LC_MESSAGES/*.mo"]
