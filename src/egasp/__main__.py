@@ -197,7 +197,7 @@ def input_main():
 
 def main():
     STATE = 'cli'
-    if STATE:
+    if STATE == 'cli':
         cli_main()
     elif STATE == 'input':
         input_main()

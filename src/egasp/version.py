@@ -16,9 +16,9 @@
  -----------------------------------------------------------------------
 Author       : 焱铭
 Date         : 2024-03-01 15:52:28 +0800
-LastEditTime : 2025-03-14 07:57:05 +0800
+LastEditTime : 2025-04-30 13:17:56 +0800
 Github       : https://github.com/YanMing-lxb/
-FilePath     : /egasp/src/egasp/version.py
+FilePath     : /EG-ASP/src/egasp/version.py
 Description  : 
  -----------------------------------------------------------------------
 '''
@@ -26,4 +26,4 @@ Description  :
 #!/usr/bin/env python
 
 script_name = 'EG-ASP'
-__version__ = '0.0.6'
+__version__ = '0.0.7'
