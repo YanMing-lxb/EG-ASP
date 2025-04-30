@@ -18,7 +18,7 @@ Author       : 焱铭
 Date         : 2025-04-22 10:43:55 +0800
 LastEditTime : 2025-04-30 14:16:25 +0800
 Github       : https://github.com/YanMing-lxb/
-FilePath     : /EG-ASP/src/egasp/__main__.py
+FilePath     : /egasp/src/egasp/__main__.py
 Description  : 
  -----------------------------------------------------------------------
 '''

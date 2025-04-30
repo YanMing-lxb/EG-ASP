@@ -1,4 +1,4 @@
-name: Publish EG-ASP 🐍  # 定义工作流的名称，当推送匹配的标签时发布到PyPI
+name: Publish egasp 🐍  # 定义工作流的名称，当推送匹配的标签时发布到PyPI
 on:
   push:
     tags:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Build EG-ASP  # 定义构建作业的名称
+    name: Build egasp  # 定义构建作业的名称
     runs-on: ubuntu-latest  # 指定运行此作业的操作系统
 
     steps:
@@ -32,7 +32,7 @@ jobs:
           CHANGELOG.md
 
   build-windows:
-    name: Publish 🐍 EG-ASP 📦 to Windows
+    name: Publish 🐍 egasp 📦 to Windows
     runs-on: windows-latest  # 指定运行此作业的操作系统
 
     steps:
@@ -59,13 +59,13 @@ jobs:
         path: dist\egasp.exe
 
   publish-to-pypi:
-    name: Publish 🐍 EG-ASP 📦 to PyPI  # 定义发布到PyPI作业的名称
+    name: Publish 🐍 egasp 📦 to PyPI  # 定义发布到PyPI作业的名称
     if: startsWith(github.ref, 'refs/tags/')  # 只有在推送标签时才执行此作业
     needs: build  # 指定此作业依赖于build作业
     runs-on: ubuntu-latest  # 指定运行此作业的操作系统
     environment:
-      name: eg-asp-pypi  # 定义环境名称
-      url: https://pypi.org/project/eg-asp  # 替换为实际的PyPI项目URL
+      name: egasp-pypi  # 定义环境名称
+      url: https://pypi.org/project/egasp  # 替换为实际的PyPI项目URL
     permissions:
       contents: read  # 需要读取内容的权限
       id-token: write  # 需要写入ID令牌的权限
@@ -86,7 +86,7 @@ jobs:
         packages-dir: dist/dist/
   
   publish-to-github-release:
-    name: Publish 🐍 EG-ASP 📦 to GitHub Release  # 定义发布到GitHub Release作业的名称
+    name: Publish 🐍 egasp 📦 to GitHub Release  # 定义发布到GitHub Release作业的名称
     if: startsWith(github.ref, 'refs/tags/')  # 只有在推送标签时才执行此作业
     needs: [build,build-windows]  # 指定此作业依赖于build作业
     runs-on: ubuntu-latest  # 指定运行此作业的操作系统
@@ -139,5 +139,5 @@ jobs:
       with:
         body_path: ${{ github.workspace }}-CHANGELOG.txt
         token: ${{ secrets.PUBLISH_EGASP }}  # 替换为实际的GitHub Token
-        name: EG-ASP ${{ github.ref_name }} # 
+        name: egasp ${{ github.ref_name }} # 
         files: dist/*  # 指定要发布的文件路径

@@ -18,7 +18,7 @@ Author       : 焱铭
 Date         : 2025-04-22 12:43:54 +0800
 LastEditTime : 2025-04-29 17:37:32 +0800
 Github       : https://github.com/YanMing-lxb/
-FilePath     : /EG-ASP/src/egasp/validate.py
+FilePath     : /egasp/src/egasp/validate.py
 Description  : 
  -----------------------------------------------------------------------
 '''
