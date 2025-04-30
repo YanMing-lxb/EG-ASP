@@ -14,7 +14,6 @@ from egasp.version import script_name, __version__
 
 _ = set_language('check_version')
 
-PROGRAM_NAME = 'pytexmk'
 API_URL = f"https://api.github.com/repos/YanMing-lxb/{script_name}/releases/latest"
 
 class UpdateChecker():
@@ -42,8 +41,8 @@ class UpdateChecker():
         self.cache_time = cache_time * 3600  # 将缓存时间转换为秒并存储
         self.time_out = time_out  # 存储超时时间
 
-        cache_path = Path(user_cache_dir(PROGRAM_NAME, ensure_exists=True))
-        self.cache_file = cache_path / f"{PROGRAM_NAME}_version_cache.toml"
+        cache_path = Path(user_cache_dir(script_name, ensure_exists=True))
+        self.cache_file = cache_path / f"{script_name}_version_cache.toml"
 
     # --------------------------------------------------------------------------------
     # 定义 缓存文件读取函数
@@ -183,6 +182,6 @@ class UpdateChecker():
 
         if current_version < latest_version:
             print(_("有新版本可用: ") + f"[bold green]{latest_version}[/bold green] " + _("当前版本: ") + f"[bold red]{current_version}[/bold red]")
-            print(_("python库请运行 [bold green]'pip install --upgrade %(args)s'[/bold green] 进行更新，独立可执行文件则请去 https://github.com/YanMing-lxb/EG-ASP/releases/latest 下载") % {'args': PROGRAM_NAME})
+            print(_("python库请运行 [bold green]'pip install --upgrade %(args)s'[/bold green] 进行更新，独立可执行文件则请去 https://github.com/YanMing-lxb/EG-ASP/releases/latest 下载") % {'args': script_name})
         else:
             print(_("当前版本: ") + f"[bold green]{current_version}[/bold green]")
