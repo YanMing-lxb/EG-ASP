@@ -5,7 +5,7 @@ on:
       - v*.*.*  # 当推送以v开头的标签时触发此工作流
 
 jobs:
-  build:
+  build-pypi:
     name: Build to PYPI  # 定义构建作业的名称
     runs-on: ubuntu-latest  # 指定运行此作业的操作系统
 
@@ -61,7 +61,7 @@ jobs:
   publish-to-pypi:
     name: Publish 🐍 egasp 📦 to PyPI  # 定义发布到PyPI作业的名称
     if: startsWith(github.ref, 'refs/tags/')  # 只有在推送标签时才执行此作业
-    needs: Build to PYPI  # 指定此作业依赖于作业
+    needs: build-pypi  # 指定此作业依赖于作业
     runs-on: ubuntu-latest  # 指定运行此作业的操作系统
     environment:
       name: pypi-egasp  # 定义环境名称
@@ -88,7 +88,7 @@ jobs:
   publish-to-github-release:
     name: Publish 🐍 egasp 📦 to GitHub Release  # 定义发布到GitHub Release作业的名称
     if: startsWith(github.ref, 'refs/tags/')  # 只有在推送标签时才执行此作业
-    needs: [Build to PYPI,Build to Windows]  # 指定此作业依赖
+    needs: [build-pypi,build-windows]  # 指定此作业依赖
     runs-on: ubuntu-latest  # 指定运行此作业的操作系统
 
     steps:
@@ -110,7 +110,9 @@ jobs:
 
     - name: Extract tag name  # 提取标签名称的步骤
       id: extract_tag
-      run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      run: |
+        TAG_NAME=${GITHUB_REF#refs/tags/}
+        echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
       
     - name: Generate Changelog
       run: |
