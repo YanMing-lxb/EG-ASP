@@ -45,9 +45,8 @@ pip3 install --upgrade egasp
 
 ## 未来计划
 
-- [ ] 打包成独立可执行程序
+- [X] 打包成独立可执行程序
 - [ ] 支持 excel 调用
-
 
 ## 来源
 
