@@ -16,7 +16,7 @@
  *  -----------------------------------------------------------------------
  * Author       : 焱铭
  * Date         : 2025-04-22 10:43:55 +0800
- * LastEditTime : 2025-05-06 14:31:11 +0800
+ * LastEditTime : 2025-05-06 14:40:11 +0800
  * Github       : https://github.com/YanMing-lxb/
  * FilePath     : /egasp/README.md
  * Description  : 
@@ -55,6 +55,8 @@ pip3 install --upgrade egasp
 2. **加载插件**  
    在 Excel 中依次点击：  
    `文件` → `选项` → `加载项` → 在底部选择 `转到...` → 点击 `浏览` → 选择 `EgaspAddin.xlam` 文件 → 确定加载。
+3. **使用示例**
+   见 `EgaspAddin.xlsx` 文件
 
 ### 错误提示说明
 
