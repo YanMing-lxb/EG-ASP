@@ -92,6 +92,9 @@ jobs:
     runs-on: ubuntu-latest  # 指定运行此作业的操作系统
 
     steps:
+    - name: Checkout source  # 检出源代码的步骤
+      uses: actions/checkout@v4  # 使用actions/checkout动作来检出代码
+      
     - name: Download all the 📦 dists  # 下载所有分发包的步骤
       uses: actions/download-artifact@v4  # 使用actions/download-artifact动作来下载构建好的包
       with:
@@ -108,12 +111,8 @@ jobs:
     - name: Verify file structure after download
       run: ls -R dist/
     
-    - name: Checkout source  # 检出源代码的步骤
-      uses: actions/checkout@v4  # 使用actions/checkout动作来检出代码
-      
     - name: Move xlsx and xlam files from src to dist
       run: |
-        mkdir -p dist/
         cp ${{ github.workspace }}/src/EgaspAddin.xlsx dist/
         cp ${{ github.workspace }}/src/EgaspAddin.xlam dist/
 
