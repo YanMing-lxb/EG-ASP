@@ -19,7 +19,7 @@
  *  -----------------------------------------------------------------------
  * Author       : 焱铭
  * Date         : 2025-04-24 12:30:56 +0800
- * LastEditTime : 2025-04-30 22:01:29 +0800
+ * LastEditTime : 2025-05-06 14:32:36 +0800
  * Github       : https://github.com/YanMing-lxb/
  * FilePath     : /egasp/CHANGELOG.md
  * Description  : 
@@ -43,6 +43,11 @@
 ### 其他
 - 新增 CHANGELOG.md 文件，用于记录版本更新日志。
  -->
+
+## v0.1.2
+这一部分详细说明见README
+### 🎉新增
+- 完成并实现excel调用功能
 
 ## v0.1.1
 

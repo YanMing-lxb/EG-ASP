@@ -16,7 +16,7 @@
  -----------------------------------------------------------------------
 Author       : 焱铭
 Date         : 2024-03-01 15:52:28 +0800
-LastEditTime : 2025-05-06 11:12:27 +0800
+LastEditTime : 2025-05-06 12:26:55 +0800
 Github       : https://github.com/YanMing-lxb/
 FilePath     : /egasp/src/egasp/version.py
 Description  : 
@@ -26,4 +26,4 @@ Description  :
 #!/usr/bin/env python
 
 script_name = 'egasp'
-__version__ = '0.1.1'
+__version__ = '0.1.2'

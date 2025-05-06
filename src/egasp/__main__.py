@@ -16,12 +16,13 @@
  -----------------------------------------------------------------------
 Author       : 焱铭
 Date         : 2025-04-22 10:43:55 +0800
-LastEditTime : 2025-05-06 10:35:03 +0800
+LastEditTime : 2025-05-06 14:11:23 +0800
 Github       : https://github.com/YanMing-lxb/
 FilePath     : /egasp/src/egasp/__main__.py
 Description  : 
  -----------------------------------------------------------------------
 '''
+import os
 import sys
 import argparse
 from rich import box
@@ -39,8 +40,6 @@ from egasp.version import script_name, __version__
 
 logger = setup_logger(False)
 eg = EG_ASP_Core()  # 初始化核心计算类实例
-
-
 
 def print_table(result: dict):
     console = Console(width=59)
@@ -139,10 +138,49 @@ def input_main():
         console.input("[red]程序运行出错，按任意键退出...[/red]")
 
 
+def excel_entry():
+    """
+    用于 Excel 调用的入口函数，接收参数并输出单一属性值到临时文件
+    使用方式：
+        egasp.exe --excel --type=volume --value=50 --temp=25 --prop=rho
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--type', type=str, required=True, help='查询类型 (volume/mass)')
+    parser.add_argument('--value', type=float, required=True, help='浓度值')
+    parser.add_argument('--temp', type=float, required=True, help='温度值')
+    parser.add_argument('--prop', type=str, required=True, help='要查询的属性')
+    args = parser.parse_args()
+
+
+    mass, volume, freezing, boiling, rho, cp, k, mu = eg.get_egasp(args.temp, args.type, args.value)
+    props_map = {
+        'mass': mass,
+        'volume': volume,
+        'freezing': freezing,
+        'boiling': boiling,
+        'rho': rho,
+        'cp': cp,
+        'k': k,
+        'mu': mu
+    }
+    result = props_map.get(args.prop.lower(), '#N/A')
+    
+    print(result)
+
+    # 将结果写入临时文件供 Excel 读取
+    output_path = os.path.join(os.path.dirname(sys.argv[0]), 'egasp_output.tmp')
+    with open(output_path, 'w') as f:
+        f.write(str(result))
+
+
 def main():
-    # 当用户双击运行或使用命令行传参时，分别进入不同的模式。
     if len(sys.argv) > 1:
-        cli_main()
+        if sys.argv[1] == '--excel':
+            # 移除第一个参数 '--excel'，避免干扰 argparse
+            sys.argv.pop(1)
+            excel_entry()
+        else:
+            cli_main()
     else:
         input_main()
 

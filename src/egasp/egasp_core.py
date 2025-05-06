@@ -163,8 +163,6 @@ class EG_ASP_Core:
             - mu: 动力粘度 (Pa·s)
         """
 
-        eg = EG_ASP_Core()  # 初始化核心计算类实例
-
         # 校验查询类型, 确保其为合法值 ("volume" 或 "mass")
         query_type = self.validate.type_value(query_type)
 

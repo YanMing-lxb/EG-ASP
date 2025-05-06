@@ -16,7 +16,7 @@
  *  -----------------------------------------------------------------------
  * Author       : 焱铭
  * Date         : 2025-04-22 10:43:55 +0800
- * LastEditTime : 2025-04-22 22:30:30 +0800
+ * LastEditTime : 2025-05-06 14:31:11 +0800
  * Github       : https://github.com/YanMing-lxb/
  * FilePath     : /egasp/README.md
  * Description  : 
@@ -43,10 +43,28 @@ pip3 install egasp
 pip3 install --upgrade egasp
 ```
 
+## EXCEL 加载项使用说明
+
+### 设置 Excel 插件
+
+如需在 Excel 中使用 `egasp.exe` 提供的功能，请按照以下步骤进行设置：
+
+1. **文件路径**  
+   确保 `EgaspAddin.xlam` 文件与 `egasp.exe` 文件位于相同的文件夹路径下。
+
+2. **加载插件**  
+   在 Excel 中依次点击：  
+   `文件` → `选项` → `加载项` → 在底部选择 `转到...` → 点击 `浏览` → 选择 `EgaspAddin.xlam` 文件 → 确定加载。
+
+### 错误提示说明
+
+- `#NO_OUTPUT`：表明输入存在错误或者输入范围超出了数据库支持的范围，请检查并重新调整输入
+
 ## 未来计划
 
 - [X] 打包成独立可执行程序
-- [ ] 支持 excel 调用
+- [X] 支持 excel 调用
+- [ ] 改进EXCEL加载项的计算速度
 
 ## 来源
 
