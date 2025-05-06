@@ -111,8 +111,8 @@ jobs:
     - name: Move xlsx and xlam files from src to dist
       run: |
         mkdir -p dist/
-        cp src/*.xlsx dist/
-        cp src/*.xlam dist/
+        cp src/EgaspAddin.xlsx dist/
+        cp src/EgaspAddin.xlam dist/
 
     - name: Extract tag name  # 提取标签名称的步骤
       id: extract_tag
