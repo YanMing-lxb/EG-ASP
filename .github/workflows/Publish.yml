@@ -107,7 +107,10 @@ jobs:
         path: dist/  # 关键修改：与 Linux 构建产物合并路径s
     - name: Verify file structure after download
       run: ls -R dist/
-
+    
+    - name: Checkout source  # 检出源代码的步骤
+      uses: actions/checkout@v4  # 使用actions/checkout动作来检出代码
+      
     - name: Move xlsx and xlam files from src to dist
       run: |
         mkdir -p dist/
