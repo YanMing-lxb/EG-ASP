@@ -16,13 +16,13 @@
  -----------------------------------------------------------------------
 Author       : 焱铭
 Date         : 2025-04-22 10:43:55 +0800
-LastEditTime : 2025-04-30 14:16:25 +0800
+LastEditTime : 2025-05-06 10:35:03 +0800
 Github       : https://github.com/YanMing-lxb/
 FilePath     : /egasp/src/egasp/__main__.py
 Description  : 
  -----------------------------------------------------------------------
 '''
-
+import sys
 import argparse
 from rich import box
 from rich import print
@@ -31,7 +31,6 @@ from rich.prompt import Prompt
 from rich.console import Console
 from rich_argparse import RichHelpFormatter
 
-from egasp.validate import Validate
 from egasp.egasp_core import EG_ASP_Core
 from egasp.logger_config import setup_logger
 from egasp.check_version import UpdateChecker
@@ -39,63 +38,8 @@ from egasp.check_version import UpdateChecker
 from egasp.version import script_name, __version__
 
 logger = setup_logger(False)
+eg = EG_ASP_Core()  # 初始化核心计算类实例
 
-
-def get_egasp(query_temp: float, query_type: str = 'volume', query_value: float = 50) -> tuple:
-    """
-    根据输入的查询类型、浓度和温度, 计算乙二醇水溶液的相关属性。
-
-    Parameters
-    ----------
-    query_type : str
-        查询浓度的类型, 可选值为 "volume" 或 "mass", 分别表示体积浓度和质量浓度, 默认值为 "volume"。
-    query_value : float
-        查询的浓度值, 范围为 10% 到 90%, 单位为百分比 (%), 默认值为 50。
-    query_temp : float
-        查询的温度值, 范围为 -35°C 到 125°C。
-
-    Returns
-    -------
-    tuple
-        返回一个包含以下属性的元组：
-        - mass: 质量浓度 (%)
-        - volume: 体积浓度 (%)
-        - freezing: 冰点 (°C)
-        - boiling: 沸点 (°C)
-        - rho: 密度 (kg/m³)
-        - cp: 比热容 (J/kg·K)
-        - k: 导热率 (W/m·K)
-        - mu: 动力粘度 (Pa·s)
-    """
-
-    eg = EG_ASP_Core()  # 初始化核心计算类实例
-    va = Validate()  # 初始化校验类实例
-
-    # 校验查询类型, 确保其为合法值 ("volume" 或 "mass")
-    query_type = va.type_value(query_type)
-
-    # 校验查询浓度, 确保其在 10% 到 90% 的范围内
-    query_value = va.input_value(query_value, min_val=10, max_val=90)
-
-    # 校验查询温度, 确保其在 -35°C 到 125°C 的范围内
-    query_temp = va.input_value(query_temp, min_val=-35, max_val=125)
-
-    # 根据查询类型调用相应的函数, 获取冰点和沸点属性
-    mass, volume, freezing, boiling = eg.get_fb_props(query_value, query_type=query_type)
-
-    # 获取密度 (rho), 单位为 kg/m³
-    rho = eg.get_props(temp=query_temp, conc=volume, egp_key='rho')
-
-    # 获取比热容 (cp), 单位为 J/kg·K
-    cp = eg.get_props(temp=query_temp, conc=volume, egp_key='cp')
-
-    # 获取导热率 (k), 单位为 W/m·K
-    k = eg.get_props(temp=query_temp, conc=volume, egp_key='k')
-
-    # 获取动力粘度 (mu), 单位为 Pa·s, 并将结果从 mPa·s 转换为 Pa·s
-    mu = eg.get_props(temp=query_temp, conc=volume, egp_key='mu') / 1000
-
-    return mass, volume, freezing, boiling, rho, cp, k, mu
 
 
 def print_table(result: dict):
@@ -140,7 +84,7 @@ def cli_main():
     print(f"查询类型: {args.query_type}")
     print(f"查询浓度: {args.query_value} %")
     print(f"查询温度: {args.query_temp} °C")
-    mass, volume, freezing, boiling, rho, cp, k, mu = get_egasp(args.query_temp, args.query_type, args.query_value)
+    mass, volume, freezing, boiling, rho, cp, k, mu = eg.get_egasp(args.query_temp, args.query_type, args.query_value)
     print('-----+--------------------------------------------+-----\n')
 
     result = {"mass": mass, "volume": volume, "freezing": freezing, "boiling": boiling, "rho": rho, "cp": cp, "k": k, "mu": mu}
@@ -175,7 +119,7 @@ def input_main():
                 console.print(f"[red]输入格式错误: {str(e)}，请重新输入[/red]")
 
             # 获取计算结果（复用原有核心逻辑）
-            mass, volume, freezing, boiling, rho, cp, k, mu = get_egasp(query_temp, query_type, query_value)
+            mass, volume, freezing, boiling, rho, cp, k, mu = eg.get_egasp(query_temp, query_type, query_value)
 
             # 打印结果表格
             print('-----+--------------------------------------------+-----\n')
@@ -196,10 +140,10 @@ def input_main():
 
 
 def main():
-    STATE = 'cli'
-    if STATE == 'cli':
+    # 当用户双击运行或使用命令行传参时，分别进入不同的模式。
+    if len(sys.argv) > 1:
         cli_main()
-    elif STATE == 'input':
+    else:
         input_main()
 
 
