@@ -3,13 +3,14 @@ import sys
 import bisect
 from typing import Tuple
 
-from egasp.data.data import EGP
-
+from egasp.data.egasp_data import EGP
+from egasp.validate import Validate
 
 class EG_ASP_Core:
 
     def __init__(self):
         self.logger = logging.getLogger(__name__)
+        self.validate = Validate()
 
     @staticmethod
     def _interpolate_linear(x1: float, y1: float, x2: float, y2: float, x: float) -> float:
@@ -132,3 +133,60 @@ class EG_ASP_Core:
             boiling = self._interpolate_linear(m1, b1, m2, b2, query)
 
         return (mass, volume, freezing, boiling)
+
+
+
+    def get_egasp(self, query_temp: float, query_type: str = 'volume', query_value: float = 50) -> tuple:
+        """
+        根据输入的查询类型、浓度和温度, 计算乙二醇水溶液的相关属性。
+
+        Parameters
+        ----------
+        query_type : str
+            查询浓度的类型, 可选值为 "volume" 或 "mass", 分别表示体积浓度和质量浓度, 默认值为 "volume"。
+        query_value : float
+            查询的浓度值, 范围为 10% 到 90%, 单位为百分比 (%), 默认值为 50。
+        query_temp : float
+            查询的温度值, 范围为 -35°C 到 125°C。
+
+        Returns
+        -------
+        tuple
+            返回一个包含以下属性的元组：
+            - mass: 质量浓度 (%)
+            - volume: 体积浓度 (%)
+            - freezing: 冰点 (°C)
+            - boiling: 沸点 (°C)
+            - rho: 密度 (kg/m³)
+            - cp: 比热容 (J/kg·K)
+            - k: 导热率 (W/m·K)
+            - mu: 动力粘度 (Pa·s)
+        """
+
+        eg = EG_ASP_Core()  # 初始化核心计算类实例
+
+        # 校验查询类型, 确保其为合法值 ("volume" 或 "mass")
+        query_type = self.validate.type_value(query_type)
+
+        # 校验查询浓度, 确保其在 10% 到 90% 的范围内
+        query_value = self.validate.input_value(query_value, min_val=10, max_val=90)
+
+        # 校验查询温度, 确保其在 -35°C 到 125°C 的范围内
+        query_temp = self.validate.input_value(query_temp, min_val=-35, max_val=125)
+
+        # 根据查询类型调用相应的函数, 获取冰点和沸点属性
+        mass, volume, freezing, boiling = self.get_fb_props(query_value, query_type=query_type)
+
+        # 获取密度 (rho), 单位为 kg/m³
+        rho = self.get_props(temp=query_temp, conc=volume, egp_key='rho')
+
+        # 获取比热容 (cp), 单位为 J/kg·K
+        cp = self.get_props(temp=query_temp, conc=volume, egp_key='cp')
+
+        # 获取导热率 (k), 单位为 W/m·K
+        k = self.get_props(temp=query_temp, conc=volume, egp_key='k')
+
+        # 获取动力粘度 (mu), 单位为 Pa·s, 并将结果从 mPa·s 转换为 Pa·s
+        mu = self.get_props(temp=query_temp, conc=volume, egp_key='mu') / 1000
+
+        return mass, volume, freezing, boiling, rho, cp, k, mu
