@@ -10,7 +10,7 @@ authors = [
 ]
 description = "乙二醇水溶液属性查询程序 Ethylene Glycol Aqueous Solution Properties Program"
 keywords = ["Ethylene Glycol", "Properties"]
-dependencies = ["rich", "rich_argparse", "toml", "packaging"]
+dependencies = ["rich", "rich_argparse", "toml", "packaging", "platformdirs"]
 readme = "README.md"
 requires-python = ">=3.9"
 license = "GPL-3.0-or-later"
